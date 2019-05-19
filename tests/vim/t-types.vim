@@ -1,4 +1,5 @@
-" Test for different error types.  Can be called using `vim -u ...`.
+" Test for different error types.
+" Can be called using `vim -u ...`, or `:source %`.
 "
 " E: error
 " W: warning
@@ -24,28 +25,33 @@ exe 'source '.fnameescape(s:plugin_dir.'/plugin/neomake.vim')
 let s:maker = {}
 function! s:maker.get_list_entries(...) abort
   let entries = [
-        \ {'lnum': 3, 'type': 'E', 'text': 'error'},
-        \ {'lnum': 4, 'type': 'W', 'text': 'warning'},
-        \ {'lnum': 5, 'type': 'I', 'text': 'info'},
-        \ {'lnum': 6, 'type': 'M', 'text': 'message'},
-        \ {'lnum': 7, 'type': 'S', 'text': 'style'},
-        \ {'lnum': 8, 'type': '',  'text': 'no-type'},
+        \ {'lnum': 4, 'type': 'E', 'text': 'error'},
+        \ {'lnum': 5, 'type': 'W', 'text': 'warning'},
+        \ {'lnum': 6, 'type': 'I', 'text': 'info'},
+        \ {'lnum': 7, 'type': 'M', 'text': 'message'},
+        \ {'lnum': 8, 'type': 'S', 'text': 'style'},
+        \ {'lnum': 9, 'type': '',  'text': 'no-type'},
         \ ]
   let bufnr = bufnr('%')
   call map(entries, 'extend(v:val, {''bufnr'': bufnr})')
   return entries
 endfunction
 
-function! s:VimEnter() abort
-  filetype plugin indent on
-  syntax on
+if has("vim_starting")
+  " For `-u`.
+  function! s:VimEnter() abort
+    filetype plugin indent on
+    syntax on
 
-  exe 'edit '.s:sfile
+    exe 'edit '.s:sfile
+    call neomake#Make(1, [s:maker])
+  endfunction
+  augroup test
+    au VimEnter * ++nested call s:VimEnter()
+  augroup END
+else
+  " For manual setup: `:source %`.
   call neomake#Make(1, [s:maker])
-endfunction
-
-augroup test
-  au VimEnter * ++nested call s:VimEnter()
-augroup END
+endif
 
 " vim: set et sw=2
