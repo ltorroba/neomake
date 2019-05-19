@@ -1,4 +1,4 @@
-" Test for different error types.  Can be called using `vim -u ...
+" Test for different error types.  Can be called using `vim -u ...`.
 "
 " E: error
 " W: warning
