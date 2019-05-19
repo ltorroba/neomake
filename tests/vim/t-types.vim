@@ -1,4 +1,4 @@
-" Test for different error types.  Can be called using `vim -u …`.
+" Test for different error types.  Can be called using `vim -u ...
 "
 " E: error
 " W: warning
@@ -26,7 +26,7 @@ function! s:maker.get_list_entries(...) abort
         \ {'lnum': 8, 'type': '',  'text': 'no-type'},
         \ ]
   let bufnr = bufnr('%')
-  call map(entries, 'extend(v:val, {"bufnr": bufnr})')
+  call map(entries, 'extend(v:val, {''bufnr'': bufnr})')
   return entries
 endfunction
 
