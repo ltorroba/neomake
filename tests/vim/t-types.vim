@@ -7,8 +7,14 @@
 " S: style
 " ?: no-type
 
-let &runtimepath = expand('<sfile>:p:h:h:h') . ',' . &runtimepath
+let s:plugin_dir = expand('<sfile>:p:h:h:h')
+let &runtimepath = s:plugin_dir . ',' . &runtimepath
 let s:sfile = expand('<sfile>')
+set noloadplugins
+if &compatible
+  let &compatible = 0
+endif
+exe 'source '.fnameescape(s:plugin_dir.'/plugin/neomake.vim')
 
 " Use some specific colorscheme.
 " let &runtimepath = expand('<sfile>:p:h') . '/colorscheme-colorish,' . &runtimepath
